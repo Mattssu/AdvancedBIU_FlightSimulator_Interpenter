@@ -20,7 +20,6 @@
 int outputHandler::sockFd = -1;
 int outputHandler::serverSock = -1;
 bool outputHandler::isServerOpen = false;
-pthread_t *outputHandler::server = 0;
 
 /**
  * Sets client info
@@ -71,9 +70,8 @@ void outputHandler::bind(string name, string path) {
 /**
  * sets server info
  */
-void outputHandler::setServerInfo(int *socket, pthread_t *thread) {
+void outputHandler::setServerInfo(int *socket) {
     serverSock = *socket;
-    server = thread;
     isServerOpen = true;
 }
 
@@ -82,10 +80,6 @@ void outputHandler::setServerInfo(int *socket, pthread_t *thread) {
  */
 bool outputHandler::isOpen() {
     return isServerOpen;
-}
-
-pthread_t *outputHandler::getThread() {
-    return server;
 }
 
 /**

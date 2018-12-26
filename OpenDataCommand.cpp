@@ -161,5 +161,5 @@ void OpenDataCommand::doCommand() {
     //Run the thread for the updating
     pthread_create(&server, nullptr, &openServer, (void *) arr);
     //set info for later use
-    outputHandler::setServerInfo(&newsockfd, &server);
+    outputHandler::setServerInfo(&newsockfd);
 }

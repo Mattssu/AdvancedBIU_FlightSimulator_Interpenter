@@ -5,6 +5,10 @@
 #ifndef EX3_OUTPUTHANDLER_H
 #define EX3_OUTPUTHANDLER_H
 
+#include <string>
+
+using namespace std;
+
 /**
  * sort of static class that handles all the output and connection
  * with simulator and dataServer
@@ -14,7 +18,6 @@ public:
     static int serverSock;
     static bool isServerOpen;
     static int sockFd;
-    static pthread_t *server;
 
     /**
     * sets client info
@@ -24,7 +27,7 @@ public:
     /**
      * sets server info
      */
-    static void setServerInfo(int *socket, pthread_t *thread);
+    static void setServerInfo(int *socket);
 
     /**
      * send set requests to the simulator
@@ -43,11 +46,6 @@ public:
     * checks if server IsOpen
     */
     static bool isOpen();
-
-    /**
-    * returns the thread
-    */
-    static pthread_t *getThread();
 
     /**
      * turns off the server and client
