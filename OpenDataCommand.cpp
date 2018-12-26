@@ -20,6 +20,10 @@ OpenDataCommand::OpenDataCommand(vector<string> params) {
     param = params;
 }
 
+/**
+ * runs the server on a thread and receives
+ * data from the simulator
+ */
 void *openServer(void *params) {
     //get param
     int *arr = (int *) params;
@@ -61,6 +65,48 @@ void *openServer(void *params) {
     }
 }
 
+/**
+ * receives the first data from the simulator
+ * to know that we can open the server and keep going
+ */
+void runOnce(int newsockfd) {
+    //create buffer and n (for debug)
+    char buffer[400];
+    int n = 0;
+    bzero(buffer, 400);
+    //to keep track of info received from simulator
+    string line = "";
+    string prevline = "";
+    vector<double> vec;
+    //keeps on running unless received boolean to stop
+
+    //keep track of position
+    int pos = 0;
+    /* If connection is established then start communicating */
+    n = read(newsockfd, buffer, 400);
+    if (n < 0) {
+        perror("ERROR reading from socket");
+        exit(1);
+    }
+    //Loop to receive 23 values.
+    line += std::string(buffer);
+    for (int i = 0; i < 22; i++) {
+        pos = line.find_first_of(",");
+        vec.push_back(stod(line.substr(0, pos)));
+        line.erase(0, pos + 1);
+    }
+    //the 23'rd value and we delete up to \n
+    vec.push_back(stod(line.substr(0, line.find_first_of("\n"))));
+    line.erase(0, line.find_first_of("\n") + 1);
+    //updates the values in Map
+    dataHandler::addPathToValue(vec);
+    vec.clear();
+}
+
+/**
+ * creates a socket and passes param to the thread
+ * it opens.
+ */
 void OpenDataCommand::doCommand() {
     //init map values
     dataHandler::initPathToValue();
@@ -100,6 +146,8 @@ void OpenDataCommand::doCommand() {
         perror("ERROR on accept");
         exit(1);
     }
+    //RUN ONCE
+    runOnce(newsockfd);
     //create thread
     pthread_t server;
     //allocate arr
