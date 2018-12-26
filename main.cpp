@@ -1,11 +1,13 @@
-
+/*
+ * Tamir Yaresko - lab
+ */
 #include <iostream>
 #include <vector>
 #include <sstream>
 #include <fstream>
 #include <map>
 #include <regex>
-//
+//utils
 #include "Command.h"
 #include "dataHandler.h"
 #include "CommandsFactory.h"
@@ -27,13 +29,6 @@ using namespace std;
 void createCommandList(map<string, CommandsFactory *> &list);
 
 int main(int argc, char *argv[]) {
-    /*
-    //test
-    stringToExpression *e = new stringToExpression("-1 *(-1* -1 ) * -10*-1*-10");
-    e = new stringToExpression("1/-2");
-    double g = e->ShunYardAlgo();
-    */
-
     //init
     map<string, CommandsFactory *> commandList;
     dataParser *dp = new dataParser();
@@ -75,16 +70,15 @@ int main(int argc, char *argv[]) {
             break;
         }
     }
-    //pthread_join(*outputHandler::getServerInfo(), nullptr);
+    //close thread
+    outputHandler::turnOffConnection();
     //deletes
     delete (dp);
     auto it = commandList.begin();
     for (; it != commandList.end(); it++) {
         delete (it->second);
     }
-    //close thread
-    outputHandler::turnOffConnection();
-    //delete (commandList);
+    sleep(5);
     return 0;
 }
 

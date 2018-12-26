@@ -11,9 +11,10 @@
  */
 class outputHandler {
 public:
-    static int DataServerSocket;
+    static int serverSock;
     static bool isServerOpen;
     static int sockFd;
+    static pthread_t *server;
 
     /**
     * sets client info
@@ -42,6 +43,11 @@ public:
     * checks if server IsOpen
     */
     static bool isOpen();
+
+    /**
+    * returns the thread
+    */
+    static pthread_t *getThread();
 
     /**
      * turns off the server and client

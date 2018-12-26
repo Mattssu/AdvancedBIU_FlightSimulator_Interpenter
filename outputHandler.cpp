@@ -18,15 +18,15 @@
 
 //in order to use static private
 int outputHandler::sockFd = -1;
-int outputHandler::DataServerSocket = -1;
+int outputHandler::serverSock = -1;
 bool outputHandler::isServerOpen = false;
+pthread_t *outputHandler::server = 0;
 
 /**
  * Sets client info
  */
 void outputHandler::setSocketInfo(int sock) {
     sockFd = sock;
-    //cout << to_string(sockFd);
 }
 
 /**
@@ -72,8 +72,8 @@ void outputHandler::bind(string name, string path) {
  * sets server info
  */
 void outputHandler::setServerInfo(int *socket, pthread_t *thread) {
-    DataServerSocket = *socket;
-    //th = thread;
+    serverSock = *socket;
+    server = thread;
     isServerOpen = true;
 }
 
@@ -82,6 +82,10 @@ void outputHandler::setServerInfo(int *socket, pthread_t *thread) {
  */
 bool outputHandler::isOpen() {
     return isServerOpen;
+}
+
+pthread_t *outputHandler::getThread() {
+    return server;
 }
 
 /**
@@ -94,11 +98,10 @@ void outputHandler::turnOffConnection() {
     if (sockFd > 0) {
         close(sockFd);
     }
-
     //Close Data Server Socket
-    if (DataServerSocket > 0) {
+    if (serverSock > 0) {
         isServerOpen = false;
-        close(DataServerSocket);
+        close(serverSock);
     }
 
 }

@@ -59,6 +59,6 @@ void ConnectCommand::connectToSim(vector<string> list) {
         exit(1);
     }
     //connected
-    cout << "Open Socket\n";
+    //cout << "Open Socket\n";
     outputHandler::setSocketInfo(sockfd);
 }
